@@ -43,11 +43,11 @@ public class JDomCheckOut implements IXmlDocument {
 			Element checkOutRecord = document.getRootElement();
 			List<Element> checkOutRecordInfo = checkOutRecord.getChildren();
 			Element patient = checkOutRecord.getChild("Patient");
-			Element creditcard = patient.getChild("creditcards");
+			Element creditcard = patient.getChild("CREDITCARDS");
 			Element nurse = checkOutRecord.getChild("Nurse");
 			Element doctor = checkOutRecord.getChild("Doctor");
 			Element room = checkOutRecord.getChild("Room");
-			Element labortory = checkOutRecord.getChild("Labortory");
+			Element labortory = checkOutRecord.getChild("Laboratories");
 			Element radiology = checkOutRecord.getChild("Radiology");
 			Element medicine = checkOutRecord.getChild("Medicine");
 			Element medicinePurchase = checkOutRecord.getChild("MedicinePurchase");
@@ -74,11 +74,22 @@ public class JDomCheckOut implements IXmlDocument {
 	}
 
 	private void fillInPatient(Element patient) {
+		Integer gender = 0;
+		switch (patient.getChild("GENDER").getValue()) {
+		case "Male":
+			gender = 1;
+			break;
+		case "Female":
+			gender = 0;
+		default:
+			break;
+		}
+
 		patientOut = new Patient(patient.getChild("SSN").getValue(), patient.getChild("FIRSTNAME").getValue(),
 				patient.getChild("MIDDLENAME").getValue(), patient.getChild("LASTNAME").getValue(),
 				patient.getChild("EMAIL").getValue(), patient.getChild("PHONENUMBER").getValue(),
 				patient.getChild("PASSWORD").getValue(), patient.getChild("BALANCEAMOUNT").getValue(),
-				patient.getChild("INSURANCEPOLICYNO").getValue(), patient.getChild("GENDER").getValue(),
+				patient.getChild("INSURANCEPOLICYNO").getValue(), gender.toString(),
 				patient.getChild("DATEOFBIRTH").getValue());
 
 	}
@@ -109,13 +120,13 @@ public class JDomCheckOut implements IXmlDocument {
 	}
 
 	private void fillInLabortory(Element labortory) {
-		labortoryOut.setLabortoryID(labortory.getChild("LabortoryID").getValue());
+		labortoryOut.setLabortoryID(labortory.getChild("LaboratoryID").getValue());
 		labortoryOut.setTakeLabDate(labortory.getChild("TakeLabDate").getValue());
-		labortoryOut.setLabortoryCost(labortory.getChild("LabortoryCost").getValue());
+		labortoryOut.setLabortoryCost(labortory.getChild("LaboratoryCost").getValue());
 	}
 
 	private void fillInRadiology(Element radiology) {
-		radiologyOut.setRadiologyID(radiology.getChild("RadiologyID").getValue());
+		radiologyOut.setRadiologyID(radiology.getChild("RadiologyLabID").getValue());
 		radiologyOut.setTakeRadioDate(radiology.getChild("TakeradioDate").getValue());
 		radiologyOut.setRadiologyCost(radiology.getChild("RadiologyCost").getValue());
 	}

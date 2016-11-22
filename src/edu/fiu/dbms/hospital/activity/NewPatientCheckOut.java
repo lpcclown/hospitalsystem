@@ -56,10 +56,13 @@ public class NewPatientCheckOut {
 		float finalcost = calculateOwnedMoney(maxBillID, jDomDemo.medicinePurchaseOut, jDomDemo.patientInsuranceOut,
 				jdbcConnection);
 		insertInquiry(jDomDemo.inquiryOut, maxPatientID, maxBillID, finalcost, jdbcConnection);
+		int maxInquiryID = getMaxID(jdbcConnection, "\"INQUIRIES\"", "\"ID\"");
 
 		// show information from DB
 		System.out.println("================BILL INFO===============================");
 		showBill(maxBillID, jdbcConnection);
+		System.out.println("================INQUIRY RECORD INFO=====================");
+		showInquiryRecord(maxInquiryID, jdbcConnection);
 		System.out.println("================BILL REMINDER INFO======================");
 		showBillReminder(maxPatientID, jdbcConnection);
 		System.out.println("================MEDICINE RESTORK REMINDER INFO==========");
@@ -69,6 +72,13 @@ public class NewPatientCheckOut {
 
 	private static void showBill(int maxBillID, JDBCConnection jdbcConnection) {
 		String selectBillInfo = "select * from hospitalsystem.\"BILLS\" where \"BILLID\" = '" + maxBillID + "'";
+		ResultSet resultSet = InteractDB.showInfoFromDB(jdbcConnection, selectBillInfo);
+		InteractDB.showResultOnConsole(resultSet, true);
+	}
+
+	private static void showInquiryRecord(int maxInquiryID, JDBCConnection jdbcConnection) {
+		String selectBillInfo = "select \"ID\", \"PATIENTID\",\"INQUIRYDATE\",\"BILLID\" from hospitalsystem.\"INQUIRIES\" where \"ID\" = '"
+				+ maxInquiryID + "'";
 		ResultSet resultSet = InteractDB.showInfoFromDB(jdbcConnection, selectBillInfo);
 		InteractDB.showResultOnConsole(resultSet, true);
 	}
